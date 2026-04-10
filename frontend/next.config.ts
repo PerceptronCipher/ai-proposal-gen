@@ -16,7 +16,7 @@ const nextConfig = {
         // This matches any request starting with /api
         source: '/api/:path*',
         // This redirects it to your Python backend
-        destination: 'http://localhost:8000/:path*', 
+        destination: 'https://api-proposal-gen.buildoninc.org/:path*', 
       },
     ]
   },

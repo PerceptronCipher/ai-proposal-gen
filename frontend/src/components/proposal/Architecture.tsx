@@ -16,7 +16,7 @@ export default function ProposalArchitecture() {
     setLoading(true)
     try {
       const response = await fetch(
-        'https://ai-proposal-gen-1.onrender.com/generate',
+        'https://api-proposal-gen.buildoninc.org/generate',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
