@@ -34,10 +34,10 @@ export default function Navbar() {
         {/* Logo Section */}
         <Link href='/' className='flex items-center gap-2 group'>
           <div className='w-8 h-8 bg-gradient-to-br from-blue-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform'>
-            <span className='text-white font-black text-xl'>F</span>
+            <span className='text-white font-black text-xl'>D</span>
           </div>
           <div className='text-white font-bold text-xl tracking-tight'>
-            Freelancer<span className='text-blue-400'>AI</span>
+            DealCraft<span className='text-blue-400'>AI</span>
           </div>
         </Link>
 
