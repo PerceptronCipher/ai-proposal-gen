@@ -1,6 +1,5 @@
 'use client'
-
-import { FaLinkedinIn, FaInstagram, FaXTwitter } from 'react-icons/fa6'
+import { FaXTwitter } from 'react-icons/fa6'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -14,7 +13,7 @@ export default function Footer() {
           {/* Brand Identity */}
           <div className='md:col-span-2'>
             <div className='text-blue-600 font-black text-2xl mb-1 tracking-tighter'>
-              Freelancer<span className='text-slate-800'>AI</span>
+              DealCraft<span className='text-slate-800'>AI</span>
             </div>
             <p className='text-slate-600 text-xs font-bold uppercase tracking-widest mb-8'>
               The Working AI Proposal
@@ -22,9 +21,8 @@ export default function Footer() {
 
             <div className='flex gap-4'>
               {[
-                { Icon: FaLinkedinIn, href: '#' },
-                { Icon: FaInstagram, href: '#' },
-                { Icon: FaXTwitter, href: '#' },
+                
+                { Icon: FaXTwitter, href: 'https://x.com/dealcraft_ai?s=21' }
               ].map(({ Icon, href }, i) => (
                 <motion.a
                   key={i}
