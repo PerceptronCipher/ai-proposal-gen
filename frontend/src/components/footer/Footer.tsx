@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand Identity */}
           <div className='md:col-span-2'>
             <div className='text-blue-600 font-black text-2xl mb-1 tracking-tighter'>
-              DealCraft<span className='text-slate-800'>AI</span>
+              Pitchcraft<span className='text-slate-800'>AI</span>
             </div>
             <p className='text-slate-600 text-xs font-bold uppercase tracking-widest mb-8'>
               The Working AI Proposal
@@ -22,7 +22,7 @@ export default function Footer() {
             <div className='flex gap-4'>
               {[
                 
-                { Icon: FaXTwitter, href: 'https://x.com/dealcraft_ai?s=21' }
+                { Icon: FaXTwitter, href: 'https://x.com/Pitchcraft_ai?s=21' }
               ].map(({ Icon, href }, i) => (
                 <motion.a
                   key={i}
