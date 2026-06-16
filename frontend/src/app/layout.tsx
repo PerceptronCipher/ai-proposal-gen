@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'FreelancerAI | Win More Clients',
+  title: 'PitchCraft AI | Win More Clients',
   description:
     'The ultimate AI tool for generating professional freelance proposals and contracts.',
   icons: {
