@@ -12,7 +12,7 @@ export default function Footer() {
         <div className='grid grid-cols-1 md:grid-cols-4 gap-12 mb-20'>
           {/* Brand Identity */}
           <div className='md:col-span-2'>
-            <div className='bg-white text-blue-600 p-2 rounded font-black text-2xl mb-1 tracking-tighter'>
+            <div className='bg-white text-blue-600 p-2 rounded w-fit font-black text-2xl mb-1 tracking-tighter'>
               Pitchcraft <span className='text-black'>AI</span>
             </div>
             <p className='text-slate-600 text-xs font-bold uppercase tracking-widest mb-8'>
