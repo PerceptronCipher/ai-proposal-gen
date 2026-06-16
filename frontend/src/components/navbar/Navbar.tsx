@@ -37,7 +37,7 @@ export default function Navbar() {
             <span className='text-white font-black text-xl'>D</span>
           </div>
           <div className='text-white font-bold text-xl tracking-tight'>
-            Pitchcraft<span className='text-blue-400'>AI</span>
+            Pitchcraft <span className='text-blue-400'>AI</span>
           </div>
         </Link>
 
