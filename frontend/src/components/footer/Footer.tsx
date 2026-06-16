@@ -22,7 +22,7 @@ export default function Footer() {
             <div className='flex gap-4'>
               {[
                 
-                { Icon: FaXTwitter, href: 'https://x.com/dealcraft_ai?s=21' }
+                { Icon: FaXTwitter, href: 'https://x.com/Pitchcraftt_ai' }
               ].map(({ Icon, href }, i) => (
                 <motion.a
                   key={i}
