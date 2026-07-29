@@ -1,6 +1,5 @@
-// ai-proposal-gen/frontend/src/components/proposal/Architecture.tsx
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, Check, RotateCcw, Sparkles } from 'lucide-react'
 
@@ -10,27 +9,16 @@ export default function ProposalArchitecture() {
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('Proposal')
   const [copied, setCopied] = useState(false)
+  
+  // State to hold the session token passed by DBChores
+  const [sessionToken, setSessionToken] = useState('')
 
-  const handleGenerate = async () => {
-    if (!input) return
-    setLoading(true)
-    try {
-      const response = await fetch(
-        'https://api-proposal-gen.buildoninc.org/generate',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ description: input }),
-        },
-      )
-      const data = await response.json()
-      setOutput(data.output)
-    } catch (error) {
-      setOutput('Error connecting to AI service. Please check your connection.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  //  Capture the DBChores session token on load
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const token = params.get('session')
+    if (token) setSessionToken(token)
+  }, [])
 
   const handleCopy = async () => {
     if (!output) return
@@ -42,6 +30,88 @@ export default function ProposalArchitecture() {
       console.error('Failed to copy text: ', err)
     }
   }
+
+  // Instead of generating immediately, ask DBChores to deduct tokens first
+  const handleGenerate = () => {
+    if (!input) return
+    setLoading(true)
+
+    // Send a message to the DBChores parent window asking to deduct 150 tokens
+    window.parent.postMessage(
+      {
+        type: 'REQUEST_DEDUCTION',
+        amount: 150,
+        tool: 'Dealcraft Proposals',
+      },
+      '*'
+    )
+  }
+
+  // Listen for approval, execute the AI, and handle History/Refunds
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      // DBChores approved the deduction! Let's run the AI.
+      if (event.data?.type === 'DEDUCTION_APPROVED') {
+        try {
+          const response = await fetch(
+            'https://api-proposal-gen.buildoninc.org/generate',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                description: input,
+                tab: activeTab, // Passing active tab for backend context
+                session_token: sessionToken 
+              }),
+            },
+          )
+
+          if (!response.ok) {
+            throw new Error('AI Backend generation failed')
+          }
+
+          const data = await response.json()
+          setOutput(data.output)
+
+          //  Send the successful output back to DBChores so it saves to History
+          window.parent.postMessage(
+            {
+              type: 'SAVE_HISTORY',
+              title: `${activeTab} Generation`,
+              content: data.output,
+              amount: 150,
+            },
+            '*'
+          )
+        } catch (error) {
+          console.error('Generation error:', error)
+          
+          // THE SAFETY NET. If the backend fails, refund the user!
+          window.parent.postMessage(
+            {
+              type: 'REQUEST_REFUND',
+              amount: 150,
+            },
+            '*'
+          )
+          setOutput('Error connecting to AI service. Your tokens have been fully refunded.')
+        } finally {
+          setLoading(false)
+        }
+      } 
+      //  DBChores rejected the deduction (user is out of tokens)
+      else if (event.data?.type === 'DEDUCTION_FAILED') {
+        setLoading(false)
+        setOutput('Generation failed: Insufficient tokens in your DBChores wallet.')
+      }
+    }
+
+    // Attach the event listener
+    window.addEventListener('message', handleMessage)
+    
+    // Cleanup listener on unmount or when dependencies change
+    return () => window.removeEventListener('message', handleMessage)
+  }, [input, activeTab, sessionToken])
 
   return (
     <section id='proposal' className='py-20 bg-[#020617] px-6 relative'>
@@ -79,7 +149,7 @@ export default function ProposalArchitecture() {
             {loading ? (
               <>
                 <RotateCcw className='animate-spin' size={18} />
-                <span>Analyzing Scope...</span>
+                <span>Processing Request...</span>
               </>
             ) : (
               <>
@@ -96,7 +166,7 @@ export default function ProposalArchitecture() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-1 transition-all ${
+              className={`cursor-pointer pb-1 transition-all ${
                 activeTab === tab
                   ? 'text-blue-300 border-b-2 border-blue-300'
                   : 'hover:text-slate-200'
@@ -157,7 +227,7 @@ export default function ProposalArchitecture() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               onClick={handleCopy}
-              className={`absolute top-4 right-4 p-3 rounded-xl backdrop-blur-md transition-all shadow-lg flex items-center gap-2 ${
+              className={`cursor-pointer absolute top-4 right-4 p-3 rounded-xl backdrop-blur-md transition-all shadow-lg flex items-center gap-2 ${
                 copied
                   ? 'bg-emerald-500 text-white'
                   : 'bg-slate-900/5 hover:bg-slate-900/10 text-slate-600'
