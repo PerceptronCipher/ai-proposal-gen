@@ -7,14 +7,6 @@ A lightweight AI-powered tool that transforms raw job descriptions into:
 - Risk assessments  
 
 Built for speed, clarity, and real-world usability.
-
----
-
-## 🚀 Live Demo
-Frontend: https://ai-proposal-frontend.onrender.com/
-
-Backend API: https://ai-proposal-generator-api.onrender.com/docs  
-
 ---
 
 ## 🧠 What It Does
